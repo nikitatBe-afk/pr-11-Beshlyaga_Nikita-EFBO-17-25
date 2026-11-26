@@ -1,0 +1,24 @@
+digraph ClientClasses {
+  graph [rankdir=TB, bgcolor="white", pad=0.4, nodesep=0.45, ranksep=0.65, dpi=180];
+  node [shape=record, style=filled, fontname="Arial", fontsize=13,
+        color="#2F5597", fillcolor="#F7FBFF", margin="0.18,0.10"];
+  edge [fontname="Arial", fontsize=11, color="#506070"];
+  Client [label="{Client (record)|inn: String\lname: String\lemail: String\lbirthDate: String\l}"];
+  ClientDraft [label="{ClientDraft (record)|inn: String\lname: String\lemail: String\lbirthDate: String\l}"];
+  ClientCsvParser [label="{ClientCsvParser|+ parse(String, int): ClientDraft\l}"];
+  ClientValidator [label="{ClientValidator|+ validate(ClientDraft): List[String]\l+ addAgeCategory(String): String\l- parseBirthDate(String): LocalDate\l}"];
+  ClientRepository [label="{ClientRepository|- data: Map[String, Client]\l|+ save(Client): void\l+ findByInn(String): Client\l}"];
+  ClientImporter [label="{ClientImporter|- parser: ClientCsvParser\l- validator: ClientValidator\l- repository: ClientRepository\l|+ importFile(Path): ImportResult\l}"];
+  ImportError [label="{ImportError (record)|lineNumber: int\lmessage: String\l}"];
+  ImportResult [label="{ImportResult|- accepted: int\l- errors: List[ImportError]\l|+ addAccepted(): void\l+ addError(ImportError): void\l+ accepted(): int\l+ errors(): List[ImportError]\l}"];
+  SelfCheck [label="{SelfCheck|+ main(String[]): void\l}"];
+  ClientImporter -> ClientCsvParser [label="uses", arrowhead=vee];
+  ClientImporter -> ClientValidator [label="uses", arrowhead=vee];
+  ClientImporter -> ClientRepository [label="uses", arrowhead=vee];
+  ClientImporter -> ImportResult [label="returns", style=dashed, arrowhead=open];
+  ClientCsvParser -> ClientDraft [label="creates", style=dashed, arrowhead=open];
+  ClientValidator -> ClientDraft [label="checks", style=dashed, arrowhead=open];
+  ClientRepository -> Client [label="stores", style=dashed, arrowhead=open];
+  ImportResult -> ImportError [label="contains", arrowhead=vee];
+  SelfCheck -> ClientImporter [label="tests", style=dashed, arrowhead=open];
+}

@@ -1,0 +1,16 @@
+inn;name;email;birthDate;expected
+7701234567;Иван Иванов;office@alpha.ru;2000-01-01;OK
+123;Короткий ИНН;bad@example.com;2000-01-01;ERROR
+781234567890;Анна Петрова;info@beta.com;1995-12-31;OK
+7700000000;Нет адреса;wrongmail;2000-01-01;ERROR
+7701234567;Дубль Ивана;duplicate@example.com;2000-01-01;ERROR
+9901234567;Пётр Сидоров;gamma@example.com;1980-06-15;OK
+123456789012;Мария Кузнецова;delta@example.com;2008-02-29;OK
+9901234567;Дубль Петра;gamma2@example.com;2000-01-01;ERROR
+555;Очень короткий ИНН;short@example.com;2000-01-01;ERROR
+1112223334;Сергей Смирнов;last@example.com;2001-05-20;OK
+2223334445;Пустая дата;missing@example.com;;ERROR
+3334445556;Несуществующая дата;invalid@example.com;2023-02-29;ERROR
+4445556667;Неверный формат;format@example.com;01-02-2000;ERROR
+5556667778;Будущая дата;future@example.com;2999-01-01;ERROR
+6667778889;После ошибок;after@example.com;2006-11-26;OK

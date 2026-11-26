@@ -1,0 +1,38 @@
+digraph ImportActivity {
+  graph [rankdir=TB, bgcolor="white", pad=0.35, nodesep=0.42, ranksep=0.52, dpi=180];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=14,
+        color="#2F5597", fillcolor="#EAF2F8", margin="0.18,0.12"];
+  edge [fontname="Arial", fontsize=12, color="#506070"];
+  start [label="Начало", shape=oval, fillcolor="#E2F0D9", color="#548235"];
+  open [label="Открыть CSV в UTF-8\nи пропустить заголовок"];
+  available [label="Файл открыт?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+  read [label="Прочитать следующую строку"];
+  exists [label="Есть строка?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+  skip [label="Пустая строка или комментарий?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+  parse [label="Разобрать 4 поля CSV:\nИНН, имя, email, birthDate"];
+  validate [label="Проверить ИНН, имя, email\nи дату рождения ГГГГ-ММ-ДД"];
+  valid [label="Данные корректны?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+  duplicate [label="ИНН уже сохранён?", shape=diamond, fillcolor="#FFF2CC", color="#BF9000"];
+  save [label="Сохранить Client с birthDate\nи увеличить accepted"];
+  error [label="Добавить ImportError:\nномер строки и причина"];
+  result [label="Вернуть ImportResult:\naccepted и errors"];
+  ioerror [label="Выбросить IOException"];
+  end [label="Завершение", shape=oval, fillcolor="#FCE4D6", color="#C65911"];
+  start -> open -> available;
+  available -> ioerror [label="нет"];
+  available -> read [label="да"];
+  read -> exists;
+  exists -> result [label="нет"];
+  exists -> skip [label="да"];
+  skip -> read [label="да", constraint=false];
+  skip -> parse [label="нет"];
+  parse -> validate -> valid;
+  valid -> error [label="нет"];
+  valid -> duplicate [label="да"];
+  duplicate -> error [label="да"];
+  duplicate -> save [label="нет"];
+  save -> read [constraint=false];
+  error -> read [constraint=false];
+  result -> end;
+  ioerror -> end;
+}
